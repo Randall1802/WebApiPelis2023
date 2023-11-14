@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace WebApiPelis2023.Migrations
 {
     /// <inheritdoc />
-    public partial class Identity : Migration
+    public partial class Tablas : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -49,6 +49,52 @@ namespace WebApiPelis2023.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Generos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Nombre = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Generos", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Peliculas",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Titulo = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Descripcion = table.Column<string>(type: "text", nullable: false),
+                    Calificacion = table.Column<double>(type: "double precision", nullable: false),
+                    Duracion = table.Column<double>(type: "double precision", nullable: false),
+                    Imagen = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Peliculas", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Usuarios",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Nombre = table.Column<string>(type: "text", nullable: false),
+                    Apellido = table.Column<string>(type: "text", nullable: false),
+                    Edad = table.Column<int>(type: "integer", nullable: false),
+                    Contrasena = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Usuarios", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -157,6 +203,59 @@ namespace WebApiPelis2023.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "GeneroPelicula",
+                columns: table => new
+                {
+                    GenerosId = table.Column<int>(type: "integer", nullable: false),
+                    PeliculasId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GeneroPelicula", x => new { x.GenerosId, x.PeliculasId });
+                    table.ForeignKey(
+                        name: "FK_GeneroPelicula_Generos_GenerosId",
+                        column: x => x.GenerosId,
+                        principalTable: "Generos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GeneroPelicula_Peliculas_PeliculasId",
+                        column: x => x.PeliculasId,
+                        principalTable: "Peliculas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Opiniones",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    PeliculaId = table.Column<int>(type: "integer", nullable: false),
+                    UsuarioId = table.Column<int>(type: "integer", nullable: false),
+                    Comentario = table.Column<string>(type: "text", nullable: false),
+                    Calificacion = table.Column<double>(type: "double precision", nullable: false),
+                    Fecha = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Opiniones", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Opiniones_Peliculas_PeliculaId",
+                        column: x => x.PeliculaId,
+                        principalTable: "Peliculas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Opiniones_Usuarios_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "Usuarios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -193,6 +292,21 @@ namespace WebApiPelis2023.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GeneroPelicula_PeliculasId",
+                table: "GeneroPelicula",
+                column: "PeliculasId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Opiniones_PeliculaId",
+                table: "Opiniones",
+                column: "PeliculaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Opiniones_UsuarioId",
+                table: "Opiniones",
+                column: "UsuarioId");
         }
 
         /// <inheritdoc />
@@ -214,10 +328,25 @@ namespace WebApiPelis2023.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "GeneroPelicula");
+
+            migrationBuilder.DropTable(
+                name: "Opiniones");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Generos");
+
+            migrationBuilder.DropTable(
+                name: "Peliculas");
+
+            migrationBuilder.DropTable(
+                name: "Usuarios");
         }
     }
 }

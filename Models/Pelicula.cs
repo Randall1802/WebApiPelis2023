@@ -13,5 +13,8 @@ namespace WebApiPelis2023.Models
         public double Calificacion { get; set; }
         public double Duracion { get; set; }
         public string Imagen { get; set; }
-    }
+        //public GeneroPelicula? GeneroPelicula { get; set; }  //uno a uno con generoPeli obligatorio
+        public List<Genero> Generos { get; } = new();  //muchos a muchos con generos
+		public ICollection<Opinion> Opiniones { get; } = new List<Opinion>(); //uno a varios con opinion oblígatorio
+	}
 }

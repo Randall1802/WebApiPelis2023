@@ -11,5 +11,6 @@ namespace WebApiPelis2023.Models
         public string Apellido { get; set; }
 		public int Edad { get; set; }
 		public string Contrasena { get; set;}
+		public ICollection<Opinion> Opiniones { get; } = new List<Opinion>(); //uno a muchos con opinion obligatorio
 	}
 }

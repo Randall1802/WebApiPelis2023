@@ -19,7 +19,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql
 
 
 
-//config seguridad de identity (microsoft) para usar jwt
+//config seguridad de identity (microsoft) para usar jwt. tablas identity
 builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
 var app = builder.Build();
