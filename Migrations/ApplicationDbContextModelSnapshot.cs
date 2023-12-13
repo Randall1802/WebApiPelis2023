@@ -17,10 +17,9 @@ namespace WebApiPelis2023.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
                 .HasAnnotation("ProductVersion", "7.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
-
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("GeneroPelicula", b =>
                 {
@@ -34,7 +33,7 @@ namespace WebApiPelis2023.Migrations
 
                     b.HasIndex("PeliculasId");
 
-                    b.ToTable("GeneroPelicula");
+                    b.ToTable("GeneroPelicula", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -67,9 +66,8 @@ namespace WebApiPelis2023.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("text");
@@ -156,9 +154,8 @@ namespace WebApiPelis2023.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("text");
@@ -237,9 +234,8 @@ namespace WebApiPelis2023.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -248,16 +244,15 @@ namespace WebApiPelis2023.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Generos");
+                    b.ToTable("Generos", (string)null);
                 });
 
             modelBuilder.Entity("WebApiPelis2023.Models.Opinion", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<double>("Calificacion")
                         .HasColumnType("double precision");
@@ -281,16 +276,15 @@ namespace WebApiPelis2023.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("Opiniones");
+                    b.ToTable("Opiniones", (string)null);
                 });
 
             modelBuilder.Entity("WebApiPelis2023.Models.Pelicula", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<double>("Calificacion")
                         .HasColumnType("double precision");
@@ -313,16 +307,15 @@ namespace WebApiPelis2023.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Peliculas");
+                    b.ToTable("Peliculas", (string)null);
                 });
 
             modelBuilder.Entity("WebApiPelis2023.Models.Usuario", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Apellido")
                         .IsRequired()
@@ -341,7 +334,7 @@ namespace WebApiPelis2023.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Usuarios");
+                    b.ToTable("Usuarios", (string)null);
                 });
 
             modelBuilder.Entity("GeneroPelicula", b =>

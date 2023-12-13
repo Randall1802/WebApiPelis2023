@@ -5,7 +5,7 @@ namespace WebApiPelis2023.Models
 	public class Pelicula
 	{
         public int Id { get; set; }
-
+        
         [Required(ErrorMessage = "El campo {0} es rekerido")]
         [StringLength(maximumLength:50, ErrorMessage = "El campo {0} no debe de tener más de {1} caracteres")]
         public string Titulo { get; set; }

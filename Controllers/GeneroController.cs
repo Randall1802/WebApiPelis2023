@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Any;
+using WebApiPelis2023.DTOs;
 using WebApiPelis2023.Models;
 
 namespace WebApiPelis2023.Controllers
@@ -37,10 +38,16 @@ namespace WebApiPelis2023.Controllers
 
 		//endpoint para listar todas las categorías
 		[HttpGet("ListarGeneros")]
-		public async Task<ActionResult<List<Genero>>> ListarGeneros()
+		public async Task<ActionResult<List<GeneroDTO>>> ListarGeneros()
 		{
-			var generos = await _context.Generos.ToListAsync();
-			return Ok(generos);
+			var generos = await _context.Generos.Include(p=>p.Peliculas).ToListAsync();
+			var generosDTO = generos.Select(p => new GeneroDTO 
+			{
+				Id = p.Id,
+				Nombre = p.Nombre,
+				Peliculas = p.Peliculas.Select(g => g.Titulo).ToList(),
+			}).ToList();
+			return Ok(generosDTO);
 		}
 
 		//endpoint para buscar la info de un género en específico
