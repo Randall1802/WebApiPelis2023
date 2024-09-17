@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Any;
 using WebApiPelis2023.DTOs;
@@ -11,9 +12,11 @@ namespace WebApiPelis2023.Controllers
 	public class GeneroController : Controller
 	{
 		private readonly ApplicationDbContext _context;
-		public GeneroController(ApplicationDbContext context)
+		private readonly IMapper mapper;
+		public GeneroController(ApplicationDbContext context, IMapper mapper)
 		{
 			//con el this hago referencia al de fuera. 
+			this.mapper = mapper;
 			_context = context;
 		}
 
@@ -41,12 +44,15 @@ namespace WebApiPelis2023.Controllers
 		public async Task<ActionResult<List<GeneroDTO>>> ListarGeneros()
 		{
 			var generos = await _context.Generos.Include(p=>p.Peliculas).ToListAsync();
-			var generosDTO = generos.Select(p => new GeneroDTO 
-			{
-				Id = p.Id,
-				Nombre = p.Nombre,
-				Peliculas = p.Peliculas.Select(g => g.Titulo).ToList(),
-			}).ToList();
+			
+			//var generosDTO = generos.Select(p => new GeneroDTO 
+			//{
+			//	Id = p.Id,
+			//	Nombre = p.Nombre,
+			//	Peliculas = p.Peliculas.Select(g => g.Titulo).ToList(),
+			//}).ToList();
+
+			var generosDTO = mapper.Map<GeneroDTO>(generos);
 			return Ok(generosDTO);
 		}
 

@@ -56,20 +56,21 @@ namespace WebApiPelis2023.Controllers
 		{
 			var peliculas = await _context.Peliculas.Include(p=>p.Generos).ToListAsync();
 			//return Ok(peliculas);
-			var peliculasDTO = peliculas.Select(p=>new PeliculaDTO
-			{
-				Id=p.Id,
-				Titulo = p.Titulo,
-				Descripcion = p.Descripcion,
-				Calificacion = p.Calificacion,
-				Duracion = p.Duracion,
-				Imagen = p.Imagen,
-				Generos = p.Generos.Select(g => g.Nombre).ToList(), // Obtener solo los nombres de los géneros
-				Opiniones = p.Opiniones.Select(o => new OpinionDTO
-				{
-					// opinionDTOPropiedad = o.Propiedad
-				}).ToList()
-			}).ToList();
+			//var peliculasDTO = peliculas.Select(p=>new PeliculaDTO
+			//{
+			//	Id=p.Id,
+			//	Titulo = p.Titulo,
+			//	Descripcion = p.Descripcion,
+			//	Calificacion = p.Calificacion,
+			//	Duracion = p.Duracion,
+			//	Imagen = p.Imagen,
+			//	Generos = p.Generos.Select(g => g.Nombre).ToList(), // Obtener solo los nombres de los géneros
+			//	Opiniones = p.Opiniones.Select(o => new OpinionDTO
+			//	{
+			//		// opinionDTOPropiedad = o.Propiedad
+			//	}).ToList()
+			//}).ToList();
+			var peliculasDTO = _mapper.Map<PeliculaDTO>(peliculas);
 			return Ok(peliculasDTO);
 		}
 
@@ -121,16 +122,17 @@ namespace WebApiPelis2023.Controllers
 		}
 
 		//agregar género a pelicula, mediante sus ids
+		//modificado 14-dic-2022 agregando el first or default en lugar del find async
 		[HttpPost("AgregarGeneroAPelicula/{idPelicula}/{idGenero}")]
 		public async Task <ActionResult> AgregarGeneroAPelicula(int idPelicula, int idGenero)
 		{
-			var pelicula = await _context.Peliculas.FindAsync(idPelicula);
+			var pelicula = await _context.Peliculas.FirstOrDefaultAsync(z=>z.Id==idPelicula);
 			if (pelicula == null)
 			{
 				return NotFound(); // Si la película no existe, retorna un error 404
 			}
 
-			var genero = await _context.Generos.FindAsync(idGenero);
+			var genero = await _context.Generos.FirstOrDefaultAsync(z => z.Id == idGenero);
 			if (genero == null)
 			{
 				return NotFound(); 
@@ -141,6 +143,5 @@ namespace WebApiPelis2023.Controllers
 			await _context.SaveChangesAsync();
 			return Ok();
 		}
-
 	}
 }
